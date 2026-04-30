@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import Image from "next/image";
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
@@ -31,8 +30,8 @@ export default function Navbar() {
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16 md:h-18">
           {/* Logo */}
-          <a href="#" className="flex items-center group">
-            <Image src="/logo.png" alt="Sulus" width={120} height={48} className="h-10 w-auto" priority />
+          <a href="#" className="text-white font-black text-2xl tracking-widest">
+            SULUS
           </a>
 
           {/* Desktop nav */}

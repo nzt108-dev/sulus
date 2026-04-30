@@ -1,7 +1,9 @@
 "use client";
 
+import { motion } from "framer-motion";
 import { CarIcon, WrenchIcon, BuildingIcon, TruckIcon, PickupIcon, CaliforniaIcon, ArrowRightIcon } from "@/components/ui/Icons";
 import { ComponentType, SVGProps } from "react";
+import { fadeUp, stagger, scaleIn, viewportOnce } from "@/lib/animations";
 
 type IconComponent = ComponentType<SVGProps<SVGSVGElement> & { className?: string }>;
 
@@ -93,49 +95,61 @@ export default function AudienceSelector() {
   return (
     <section id="audience" className="py-20 bg-white">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-14">
-          <span className="inline-block text-blue-600 text-sm font-semibold uppercase tracking-widest mb-3">
+        <motion.div
+          className="text-center mb-14"
+          variants={stagger}
+          initial="hidden"
+          whileInView="visible"
+          viewport={viewportOnce}
+        >
+          <motion.span variants={fadeUp} className="inline-block text-blue-600 text-sm font-semibold uppercase tracking-widest mb-3">
             Who It&apos;s For
-          </span>
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-slate-900 leading-tight">
+          </motion.span>
+          <motion.h2 variants={fadeUp} className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-slate-900 leading-tight">
             Built for every side of{" "}
             <span className="text-blue-500">auto transport</span>
-          </h2>
-          <p className="mt-4 text-lg text-slate-500 max-w-2xl mx-auto">
+          </motion.h2>
+          <motion.p variants={fadeUp} className="mt-4 text-lg text-slate-500 max-w-2xl mx-auto">
             Whether you&apos;re moving a car, hauling vehicles, or building a business — the platform connects you directly to who you need.
-          </p>
-        </div>
+          </motion.p>
+        </motion.div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <motion.div
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
+          variants={stagger}
+          initial="hidden"
+          whileInView="visible"
+          viewport={viewportOnce}
+        >
           {audiences.map((audience) => (
-            <div
+            <motion.div
               key={audience.role}
+              variants={scaleIn}
+              whileHover={{ y: -6, transition: { duration: 0.3 } }}
               className={`group flex flex-col rounded-2xl border-2 p-7 transition-all duration-300 ${audience.bgColor} ${audience.borderColor}`}
             >
               <div className={`w-12 h-12 rounded-xl flex items-center justify-center mb-5 ${audience.iconBg}`}>
                 <audience.Icon className="w-6 h-6" />
               </div>
-
-              <h3 className={`text-xl font-bold mb-2 ${audience.accentColor}`}>
-                {audience.role}
-              </h3>
-
-              <p className="text-slate-600 text-sm leading-relaxed flex-1 mb-6">
-                {audience.description}
-              </p>
-
-              <button
+              <h3 className={`text-xl font-bold mb-2 ${audience.accentColor}`}>{audience.role}</h3>
+              <p className="text-slate-600 text-sm leading-relaxed flex-1 mb-6">{audience.description}</p>
+              <motion.button
                 onClick={() => handleJoin(audience.roleValue)}
+                whileHover={{ scale: 1.03 }}
+                whileTap={{ scale: 0.97 }}
                 className={`inline-flex items-center justify-center gap-2 rounded-lg px-5 py-2.5 text-sm font-semibold bg-white border-2 ${audience.accentColor} border-current transition-all duration-200 ${audience.btnHover} group-hover:shadow-md`}
               >
                 Join as {audience.role.split(" ")[0]}
                 <ArrowRightIcon className="w-4 h-4" />
-              </button>
-            </div>
+              </motion.button>
+            </motion.div>
           ))}
 
           {/* California badge */}
-          <div className="flex flex-col items-center justify-center rounded-2xl border-2 border-dashed border-slate-200 p-7 text-center bg-slate-50">
+          <motion.div
+            variants={scaleIn}
+            className="flex flex-col items-center justify-center rounded-2xl border-2 border-dashed border-slate-200 p-7 text-center bg-slate-50"
+          >
             <div className="w-12 h-12 rounded-xl bg-slate-100 flex items-center justify-center mb-4">
               <CaliforniaIcon className="w-6 h-6 text-slate-500" />
             </div>
@@ -143,8 +157,8 @@ export default function AudienceSelector() {
             <p className="text-sm text-slate-500 leading-relaxed">
               Launching intrastate within California first. All connections are within the state.
             </p>
-          </div>
-        </div>
+          </motion.div>
+        </motion.div>
       </div>
     </section>
   );

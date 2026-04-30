@@ -1,4 +1,3 @@
-import Image from "next/image";
 
 export default function Footer() {
   const currentYear = 2025;
@@ -11,7 +10,7 @@ export default function Footer() {
           {/* Brand column */}
           <div>
             <div className="mb-4">
-              <Image src="/logo.png" alt="Sulus" width={120} height={48} className="h-10 w-auto brightness-0 invert" />
+              <span className="text-white font-black text-2xl tracking-widest">SULUS</span>
             </div>
             <p className="text-slate-400 text-sm leading-relaxed max-w-xs">
               A California-only information marketplace for intrastate vehicle
