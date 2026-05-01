@@ -1,25 +1,23 @@
 "use client";
 
 import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { CarIcon, WrenchIcon, BuildingIcon, TruckIcon, PickupIcon, CheckIcon, ArrowRightIcon, ZapIcon, RefreshIcon, SearchIcon, DollarIcon, UserIcon, ShieldIcon } from "@/components/ui/Icons";
 import { ComponentType, SVGProps } from "react";
+import { fadeUp, stagger, fadeIn, viewportOnce } from "@/lib/animations";
 
 type IconComponent = ComponentType<SVGProps<SVGSVGElement> & { className?: string }>;
-
-interface Benefit {
-  Icon: IconComponent;
-  text: string;
-}
 
 interface Tab {
   id: string;
   label: string;
   Icon: IconComponent;
   color: string;
-  activeColor: string;
+  activeBg: string;
+  activeBorder: string;
   headline: string;
   subline: string;
-  benefits: Benefit[];
+  benefits: { Icon: IconComponent; text: string }[];
 }
 
 const tabs: Tab[] = [
@@ -27,8 +25,9 @@ const tabs: Tab[] = [
     id: "customers",
     label: "Customers",
     Icon: CarIcon,
-    color: "text-blue-500",
-    activeColor: "bg-blue-500",
+    color: "text-blue-400",
+    activeBg: "bg-blue-500",
+    activeBorder: "border-blue-500/30",
     headline: "Move your car without the confusion",
     subline: "Post a request, get responses, choose who to contact — all directly.",
     benefits: [
@@ -42,8 +41,9 @@ const tabs: Tab[] = [
     id: "flippers",
     label: "Car Flippers",
     Icon: WrenchIcon,
-    color: "text-emerald-500",
-    activeColor: "bg-emerald-500",
+    color: "text-green-400",
+    activeBg: "bg-green-500",
+    activeBorder: "border-green-500/30",
     headline: "Faster transport for your resale workflow",
     subline: "Less time waiting on brokers, more time buying and flipping.",
     benefits: [
@@ -57,8 +57,9 @@ const tabs: Tab[] = [
     id: "dealers",
     label: "Dealers & Shops",
     Icon: BuildingIcon,
-    color: "text-purple-500",
-    activeColor: "bg-purple-500",
+    color: "text-purple-400",
+    activeBg: "bg-purple-500",
+    activeBorder: "border-purple-500/30",
     headline: "Move inventory and vehicles with less hassle",
     subline: "Direct access to California drivers — no broker markup.",
     benefits: [
@@ -72,14 +73,15 @@ const tabs: Tab[] = [
     id: "haulers",
     label: "Car Haulers",
     Icon: TruckIcon,
-    color: "text-orange-500",
-    activeColor: "bg-orange-500",
+    color: "text-orange-400",
+    activeBg: "bg-orange-500",
+    activeBorder: "border-orange-500/30",
     headline: "Find loads without broker dependency",
     subline: "Discover direct customer requests across California.",
     benefits: [
       { Icon: SearchIcon, text: "More visibility with customers posting directly" },
       { Icon: UserIcon, text: "Connect with customers without going through a broker" },
-      { Icon: DollarIcon, text: "Subscription-based model planned — no per-job commission" },
+      { Icon: DollarIcon, text: "Subscription-based model — no per-job commission" },
       { Icon: ZapIcon, text: "Respond to opportunities when it fits your route" },
     ],
   },
@@ -87,15 +89,16 @@ const tabs: Tab[] = [
     id: "pickup",
     label: "Pickup Owners",
     Icon: PickupIcon,
-    color: "text-rose-500",
-    activeColor: "bg-rose-500",
+    color: "text-rose-400",
+    activeBg: "bg-rose-500",
+    activeBorder: "border-rose-500/30",
     headline: "Turn your truck into a side income",
     subline: "Find local transport jobs that work around your schedule.",
     benefits: [
       { Icon: DollarIcon, text: "Explore side-income opportunities near you" },
-      { Icon: SearchIcon, text: "Start with local California jobs — no long hauls required" },
+      { Icon: SearchIcon, text: "Start with local California jobs — no long hauls" },
       { Icon: ZapIcon, text: "Work on your own schedule and terms" },
-      { Icon: ShieldIcon, text: "Low barrier to entry — no special licenses for local moves" },
+      { Icon: ShieldIcon, text: "Low barrier to entry for local moves" },
     ],
   },
 ];
@@ -105,87 +108,108 @@ export default function Benefits() {
   const tab = tabs[activeTab];
 
   return (
-    <section id="benefits" className="py-20 bg-slate-50">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-12">
-          <span className="inline-block text-blue-600 text-sm font-semibold uppercase tracking-widest mb-3">
+    <section id="benefits" className="py-28 bg-[#080c14] relative overflow-hidden">
+      <div className="absolute inset-0 grid-pattern pointer-events-none opacity-60" />
+
+      <div className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <motion.div
+          className="text-center mb-14"
+          variants={stagger}
+          initial="hidden"
+          whileInView="visible"
+          viewport={viewportOnce}
+        >
+          <motion.span variants={fadeUp} className="inline-block text-green-400 text-xs font-bold uppercase tracking-widest mb-4">
             Early Access Benefits
-          </span>
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-slate-900 leading-tight">
-            Why join <span className="text-blue-500">early?</span>
-          </h2>
-          <p className="mt-4 text-lg text-slate-500 max-w-2xl mx-auto">
+          </motion.span>
+          <motion.h2 variants={fadeUp} className="text-4xl sm:text-5xl md:text-6xl font-black text-white leading-tight tracking-tight">
+            Why join{" "}
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-green-400 to-emerald-300">
+              early?
+            </span>
+          </motion.h2>
+          <motion.p variants={fadeUp} className="mt-5 text-lg text-slate-400 max-w-2xl mx-auto">
             Early members help shape the platform and get first access when it launches in California.
-          </p>
-        </div>
+          </motion.p>
+        </motion.div>
 
         {/* Tab bar */}
-        <div className="flex flex-wrap justify-center gap-2 mb-10">
+        <motion.div
+          className="flex flex-wrap justify-center gap-2 mb-10"
+          variants={fadeIn}
+          initial="hidden"
+          whileInView="visible"
+          viewport={viewportOnce}
+        >
           {tabs.map((t, idx) => (
-            <button
+            <motion.button
               key={t.id}
               onClick={() => setActiveTab(idx)}
+              whileHover={{ scale: 1.03 }}
+              whileTap={{ scale: 0.97 }}
               className={`inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-semibold transition-all duration-200 ${
                 activeTab === idx
-                  ? `${t.activeColor} text-white shadow-md`
-                  : "bg-white border border-slate-200 text-slate-600 hover:border-slate-300 hover:text-slate-900"
+                  ? `${t.activeBg} text-white shadow-lg`
+                  : "bg-white/[0.04] border border-white/[0.08] text-slate-400 hover:text-white hover:bg-white/[0.07]"
               }`}
             >
               <t.Icon className="w-4 h-4" />
               {t.label}
-            </button>
+            </motion.button>
           ))}
-        </div>
+        </motion.div>
 
         {/* Content panel */}
-        <div className="bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden">
-          <div className="grid md:grid-cols-5">
-            {/* Left: headline */}
-            <div className="md:col-span-2 p-8 md:p-10 flex flex-col justify-center bg-gradient-to-br from-slate-900 to-slate-800">
-              <div className={`w-12 h-12 rounded-2xl flex items-center justify-center mb-6 bg-white/10`}>
-                <tab.Icon className="w-6 h-6 text-white" />
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={activeTab}
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -8 }}
+            transition={{ duration: 0.3 }}
+            className={`bg-white/[0.03] border rounded-3xl overflow-hidden ${tab.activeBorder}`}
+          >
+            <div className="grid md:grid-cols-5">
+              {/* Left */}
+              <div className="md:col-span-2 p-8 md:p-10 flex flex-col justify-center relative overflow-hidden"
+                style={{ background: "#0d1424" }}>
+                <div className="absolute top-0 left-0 bottom-0 w-[2px]"
+                  style={{ background: `linear-gradient(to bottom, transparent, currentColor, transparent)` }} />
+                <div className={`w-12 h-12 rounded-2xl flex items-center justify-center mb-6 bg-white/[0.06]`}>
+                  <tab.Icon className={`w-6 h-6 ${tab.color}`} />
+                </div>
+                <h3 className="text-2xl font-black text-white mb-3 leading-snug">{tab.headline}</h3>
+                <p className="text-slate-500 text-sm leading-relaxed mb-8">{tab.subline}</p>
+                <a
+                  href="#waitlist"
+                  className={`inline-flex items-center gap-2 self-start text-sm font-bold text-white px-5 py-2.5 rounded-xl ${tab.activeBg} transition-opacity hover:opacity-90`}
+                >
+                  Join as {tab.label.split(" ")[0]}
+                  <ArrowRightIcon className="w-4 h-4" />
+                </a>
               </div>
-              <h3 className="text-2xl font-bold text-white mb-3 leading-snug">
-                {tab.headline}
-              </h3>
-              <p className="text-slate-400 text-sm leading-relaxed mb-8">
-                {tab.subline}
-              </p>
-              <a
-                href="#waitlist"
-                className={`inline-flex items-center gap-2 self-start text-sm font-semibold text-white px-5 py-2.5 rounded-xl ${tab.activeColor} transition-opacity duration-200 hover:opacity-90`}
-              >
-                Join as {tab.label.split(" ")[0]}
-                <ArrowRightIcon className="w-4 h-4" />
-              </a>
-            </div>
 
-            {/* Right: benefits list */}
-            <div className="md:col-span-3 p-8 md:p-10">
-              <p className="text-xs font-bold uppercase tracking-widest text-slate-400 mb-6">
-                What you get
-              </p>
-              <div className="grid sm:grid-cols-2 gap-5">
-                {tab.benefits.map((benefit, idx) => (
-                  <div key={idx} className="flex items-start gap-4">
-                    <div className="flex-shrink-0 w-9 h-9 rounded-xl bg-slate-100 flex items-center justify-center mt-0.5">
-                      <benefit.Icon className="w-4 h-4 text-slate-600" />
+              {/* Right */}
+              <div className="md:col-span-3 p-8 md:p-10">
+                <p className="text-xs font-bold uppercase tracking-widest text-slate-600 mb-6">What you get</p>
+                <div className="grid sm:grid-cols-2 gap-5">
+                  {tab.benefits.map((benefit, idx) => (
+                    <div key={idx} className="flex items-start gap-4">
+                      <div className="flex-shrink-0 w-9 h-9 rounded-xl bg-white/[0.04] border border-white/[0.07] flex items-center justify-center mt-0.5">
+                        <benefit.Icon className="w-4 h-4 text-slate-400" />
+                      </div>
+                      <p className="text-slate-400 text-sm leading-relaxed pt-1.5">{benefit.text}</p>
                     </div>
-                    <p className="text-slate-700 text-sm leading-relaxed pt-1.5">
-                      {benefit.text}
-                    </p>
-                  </div>
-                ))}
-              </div>
-
-              {/* Bottom strip */}
-              <div className="mt-8 pt-6 border-t border-slate-100 flex items-center gap-3 text-sm text-slate-400">
-                <CheckIcon className="w-4 h-4 text-green-500 flex-shrink-0" />
-                Early access is free. Be first in line when we launch in California.
+                  ))}
+                </div>
+                <div className="mt-8 pt-6 border-t border-white/[0.06] flex items-center gap-3 text-sm text-slate-600">
+                  <CheckIcon className="w-4 h-4 text-green-500 flex-shrink-0" />
+                  Early access is free. Be first in line when we launch in California.
+                </div>
               </div>
             </div>
-          </div>
-        </div>
+          </motion.div>
+        </AnimatePresence>
       </div>
     </section>
   );
